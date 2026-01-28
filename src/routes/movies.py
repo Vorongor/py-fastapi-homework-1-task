@@ -20,7 +20,7 @@ async def get_movies(
         db: Annotated[AsyncSession, Depends(get_db)],
         page: Annotated[int, Query(ge=1)] = 1,
         per_page: Annotated[int, Query(ge=1, le=20)] = 10,
-) -> List[MovieModel]:
+) -> MovieListResponseSchema:
     total_items_result = await db.execute(select(func.count(MovieModel.id)))
     total_items = total_items_result.scalar() or 0
 
@@ -38,7 +38,7 @@ async def get_movies(
     )
     movies = result.scalars().all()
 
-    base_url = f"{request.url.scheme}://{request.url.netloc}/theater/movies/"
+    base_url = "/theater/movies/"
 
     prev_page = None
     if page > 1:
@@ -61,7 +61,7 @@ async def get_movies(
 async def get_movie(
         movie_id: int,
         db: Annotated[AsyncSession, Depends(get_db)],
-) -> type[MovieModel]:
+) -> MovieModel:
     movie = await db.get(MovieModel, movie_id)
 
     if not movie:
