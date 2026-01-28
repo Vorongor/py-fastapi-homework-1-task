@@ -24,7 +24,6 @@ class MovieDetailResponseSchema(MovieBase):
     id: int
 
 
-
 class MovieListResponseSchema(BaseModel):
     movies: List[MovieDetailResponseSchema]
     prev_page: Optional[str] = None
